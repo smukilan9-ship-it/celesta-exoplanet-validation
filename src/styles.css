@@ -156,3 +156,55 @@ footer { padding: 22px; border: 0; border-radius: 18px; color: #fff; background:
   .guide-label-full { display: none; }
   .guide-label-short { display: inline; }
 }
+
+/* Guided path hovers retain legibility while adding a clear color response. */
+:root {
+  --glow-green: rgba(92, 146, 86, .28);
+  --glow-orange: rgba(238, 136, 72, .25);
+}
+
+.validation-path-grid button:hover,
+.validation-path-grid button:focus-visible,
+.criterion-tabs button:hover,
+.criterion-tabs button:focus-visible {
+  box-shadow: 0 15px 34px rgba(23, 32, 25, .12), 0 0 0 4px var(--glow-green);
+}
+
+.validation-path-grid button:nth-child(even):hover,
+.validation-path-grid button:nth-child(even):focus-visible,
+.criterion-tabs button:nth-child(even):hover,
+.criterion-tabs button:nth-child(even):focus-visible {
+  background: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 15px 34px rgba(23, 32, 25, .12), 0 0 0 4px var(--glow-orange);
+}
+
+.validation-path-grid button:nth-child(even):hover > span,
+.validation-path-grid button:nth-child(even):focus-visible > span {
+  color: var(--orange);
+}
+
+/* Use dark text on the brighter accent fills for compact controls and metrics. */
+.chapter-nav-grid a.active,
+.primary-action,
+.orbit-core,
+.concept-chip i,
+.chapter-dark .chapter-number,
+.candidate-resource-link:hover,
+.close-drawer,
+.hero-stamp strong,
+.harness-caption,
+.final-seal,
+.validation-path-grid button:hover,
+.validation-path-grid button:focus-visible,
+.metric-card.lime,
+.outline-button:hover,
+.text-action:hover {
+  color: var(--ink);
+}
+
+.validation-path-grid button:hover small,
+.validation-path-grid button:focus-visible small,
+.metric-card.lime p {
+  color: rgba(23, 32, 25, .72);
+}
