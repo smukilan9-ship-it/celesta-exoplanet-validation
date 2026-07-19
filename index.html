@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4f7c4a" />
+    <meta name="description" content="An interactive evidence trail for the leakage-conservative exoplanet classifier." />
+    <title>Validation Experience — Evidence Room</title>
+    <link rel="stylesheet" href="src/styles.css?v=20260719-4" />
+  </head>
+  <body>
+    <canvas class="sky-canvas" aria-hidden="true"></canvas>
+    <button class="guide-reopen" type="button" aria-label="Reopen guide">Guide +</button>
+    <nav class="guide-bar" aria-label="Evidence trail">
+      <a class="guide-brand" href="#start"><span class="brand-mark"></span>Evidence room</a>
+      <div class="chapter-nav">
+        <a href="#integrity">01 Integrity</a><a href="#leakage">02 Leakage</a><a href="#folds">03 Folds</a>
+        <a href="#tournament">04 Models</a><a href="#ensemble">05 Ensemble</a><a href="#claims">06 Claims</a>
+      </div>
+      <a class="learner-link" data-learner-link href="https://smukilan9-ship-it.github.io/celesta-exoplanet-learner/">Learner ↗</a>
+      <a class="learner-link" data-lab-link href="https://smukilan9-ship-it.github.io/celesta-exoplanet-candidate-lab/">Candidate Lab ↗</a>
+      <button class="collapse-guide" type="button">Hide</button>
+    </nav>
+
+    <main>
+      <section class="hero evidence-hero" id="start">
+        <div class="hero-copy">
+          <span class="eyebrow">Validation Experience / real artifacts only</span>
+          <h1>Trust the result<br />only after you<br /><em>inspect it.</em></h1>
+          <p class="hero-text">Follow six checkpoints in order. Every claim traces to a real artifact, and every final prediction began as a held-out test.</p>
+          <div class="hero-actions">
+            <a class="primary-action" href="#validationLearningPath">Start the evidence trail <span>→</span></a>
+            <button class="text-action" data-open-concept="oof">What does “held out” mean?</button>
+          </div>
+          <div class="hero-stamp"><strong id="heroRows">9,564</strong><span>held-out OOF decisions<br />available for inspection</span></div>
+        </div>
+        <div class="harness-visual" aria-label="Visual model validation path">
+          <div class="harness-caption">ONE SHARED HARNESS</div>
+          <div class="model-swarm"><span>Linear</span><span>Forest</span><span>Boosted</span><span>CatBoost</span></div>
+          <div class="harness-core"><b>GROUPED<br />FOLDS</b><i></i><b>HELD-OUT<br />PREDICTIONS</b></div>
+          <div class="evidence-branches"><span>leakage audit</span><span>experiments</span><span>calibration</span></div>
+          <div class="final-seal"><small>SELECTED</small><strong>0.8363</strong><span>macro F1</span></div>
+        </div>
+      </section>
+
+      <section class="proof-strip" aria-label="Headline validation facts"><div id="headlineFacts"></div></section>
+
+      <div id="validationLearningPath"></div>
+
+      <section class="chapter" id="integrity">
+        <div class="chapter-heading"><span class="chapter-number">01 / Dataset integrity</span><h2>Was the dataset prepared correctly?</h2><p>Before comparing models, verify the object identity, target, class balance, missingness, and provenance.</p></div>
+        <div class="integrity-layout">
+          <div class="integrity-metrics" id="integrityMetrics"></div>
+          <div class="class-stage card-surface"><div class="chart-kicker">Interactive class distribution</div><div id="classDistribution" class="class-distribution"></div><button class="concept-chip" data-open-concept="imbalance">Why macro F1? <i>?</i></button></div>
+        </div>
+        <div class="detail-grid two"><div class="card-surface source-card" id="provenanceCard"></div><div class="card-surface source-card" id="identityCard"></div></div>
+        <div class="panel-head"><div><span class="card-tag">Missingness explorer</span><h3>Which measurements are incomplete—and for whom?</h3></div><button class="outline-button" data-open-concept="missingness">Read the rule <span>+</span></button></div>
+        <div class="missingness-stage card-surface"><div class="table-controls"><label>Search feature <input id="missingSearch" type="search" placeholder="e.g. centroid, radius" /></label><label>Sort <select id="missingSort"><option value="missing_rate">Most missing</option><option value="feature">Feature A–Z</option><option value="candidate_missing_rate">Candidate missingness</option></select></label></div><div id="missingBars" class="missing-bars"></div><div class="table-footer"><button id="showAllMissing" class="text-action">Show all 98 features</button><span id="missingCount"></span></div></div>
+      </section>
+
+      <section class="chapter dark-chapter" id="leakage">
+        <div class="chapter-heading inverse"><span class="chapter-number">02 / Leakage audit</span><h2>Did the model see an answer key?</h2><p>Some catalog fields describe later vetting decisions. They can make a score look spectacular while making the science unfair.</p></div>
+        <div class="leakage-stage"><div id="leakageCompare" class="leakage-compare"></div><div class="leakage-message"><strong>Higher is not automatically better.</strong><p>Click a field to see whether it is a physical measurement, a diagnostic, an identifier, or posterior vetting information.</p></div></div>
+        <div class="field-filter" id="fieldFilter"></div><div id="leakageFields" class="leakage-fields"></div>
+      </section>
+
+      <section class="chapter" id="folds">
+        <div class="chapter-heading"><span class="chapter-number">03 / Fair validation</span><h2>Could the score survive a fair split?</h2><p>KOIs from the same host star are related. The validation harness keeps each <code>kepid</code> entirely on one side of a fold.</p></div>
+        <div class="fold-layout"><div class="fold-track card-surface"><div class="fold-track-head"><span class="card-tag">Select a held-out fold</span><strong id="foldTitle">Fold 1</strong></div><div id="foldButtons" class="fold-buttons"></div><div id="foldDetail" class="fold-detail"></div></div><div class="validation-proof" id="validationProof"></div></div>
+        <div class="comparison-stage card-surface"><div class="panel-head"><div><span class="card-tag">Split comparison</span><h3>Same families, different split discipline</h3></div><button class="concept-chip" data-open-concept="groupedFold">Why group by host star? <i>?</i></button></div><div id="splitCompare" class="split-compare"></div></div>
+      </section>
+
+      <section class="chapter" id="tournament">
+        <div class="chapter-heading"><span class="chapter-number">04 / Model tournament</span><h2>Which models won under the same harness?</h2><p>Every family used the same conservative table and the same grouped folds. Means explain the ranking; folds expose its stability.</p></div>
+        <div class="tournament-controls"><label>Score <select id="tournamentMetric"><option value="macro_f1_mean">Macro F1</option><option value="weighted_f1_mean">Weighted F1</option><option value="accuracy_mean">Accuracy</option><option value="balanced_accuracy_mean">Balanced accuracy</option><option value="train_seconds_mean">Training time</option></select></label><label>Inspect model <select id="modelSelect"></select></label></div>
+        <div class="tournament-stage card-surface"><div id="tournamentRows" class="tournament-rows"></div></div>
+        <div class="model-inspector" id="modelInspector"></div>
+      </section>
+
+      <section class="chapter" id="formulations">
+        <div class="chapter-heading"><span class="chapter-number">05 / Problem formulation</span><h2>Does the experiment solve the actual question?</h2><p>Binary Confirmed-versus-False-Positive classification is easier. It is not the same task as keeping unresolved Candidate as a real third class.</p></div>
+        <div id="formulationCards" class="formulation-cards"></div><div id="formulationDetail" class="card-surface formulation-detail"></div>
+        <div class="feature-set-stage card-surface"><div class="panel-head"><div><span class="card-tag">98 vs 59 features</span><h3>Interpretability cost: <span id="featureDelta"></span> macro F1</h3></div><button class="concept-chip" data-open-concept="featureSet">Compare the tables <i>?</i></button></div><div id="featureSetCompare"></div></div>
+      </section>
+
+      <section class="chapter" id="experiments">
+        <div class="chapter-heading"><span class="chapter-number">06 / Improvement experiments</span><h2>Which changes genuinely helped?</h2><p>Explore every branch under the same rules. A green badge means modest evidence, not a miracle. A red badge records a useful negative result.</p></div>
+        <div id="experimentFilters" class="experiment-filters"></div><div id="experimentTable" class="experiment-table card-surface"></div>
+        <div class="failed-stage"><div class="panel-head"><div><span class="card-tag">Failed approaches</span><h3>Negative results are part of the proof.</h3></div><button class="concept-chip" data-open-concept="nested">Why nested validation? <i>?</i></button></div><div id="failedCards" class="failed-cards"></div></div>
+      </section>
+
+      <section class="chapter ensemble-chapter" id="ensemble">
+        <div class="chapter-heading"><span class="chapter-number">07 / Final ensemble</span><h2>Why this final blend?</h2><p>Two complementary boosted-tree models combine real held-out probabilities. Select any saved KOI to inspect the arithmetic.</p></div>
+        <div class="ensemble-weights" id="ensembleWeights"></div>
+        <div class="ensemble-inspector card-surface"><div class="inspector-toolbar"><label>Find a KOI <input id="ensembleSearch" type="search" placeholder="K00752.01 or row ID" /></label><label>Example <select id="ensembleSelect"></select></label><a class="outline-button" href="data/final_ensemble_component_oof.csv" download>Download component OOF ↧</a></div><div id="ensembleMath"></div></div>
+      </section>
+
+      <section class="chapter" id="errors">
+        <div class="chapter-heading"><span class="chapter-number">08 / Confusion and error</span><h2>Where did the model succeed—and fail?</h2><p>A score compresses mistakes. This matrix preserves their direction, magnitude, and real object sets.</p></div>
+        <div class="confusion-layout"><div id="confusionMatrix" class="confusion-matrix card-surface"></div><div id="confusionExplanation" class="confusion-explanation"></div></div>
+        <div class="object-stage card-surface"><div class="panel-head"><div><span class="card-tag">Object set explorer</span><h3 id="objectSetTitle">Choose a confusion cell</h3></div><button class="text-action" data-open-lab>Continue in Candidate Lab ↗</button></div><div id="objectTable"></div></div>
+      </section>
+
+      <section class="chapter dark-chapter" id="calibration">
+        <div class="chapter-heading inverse"><span class="chapter-number">09 / Probability reliability</span><h2>When it says 90%, is it right about 90% of the time?</h2><p>Calibration changes the honesty of confidence, not necessarily the winning class.</p></div>
+        <div id="calibrationMetrics" class="calibration-metrics"></div><div class="curve-toggle"><button class="active" data-curve="reliability">Reliability</button><button data-curve="roc">ROC (one-vs-rest)</button><button data-curve="pr">Precision–recall</button></div><div id="curveStage" class="curve-stage"></div><div class="calibration-note">The ROC and precision–recall curves use saved multiclass OOF probabilities, one class versus the other two. They describe discrimination; reliability diagrams describe confidence honesty.</div>
+      </section>
+
+      <section class="chapter" id="interpretability">
+        <div class="chapter-heading"><span class="chapter-number">10 / Interpretability</span><h2>Which evidence did the model depend on?</h2><p>Importance is model dependence, not proof of physical causation. Inspect a feature before making a scientific story from it.</p></div>
+        <div class="importance-controls"><label>Method <select id="importanceMethod"><option value="permutation">Permutation importance</option><option value="gain">LightGBM gain</option><option value="shap">SHAP magnitude</option></select></label><label>Search <input id="importanceSearch" type="search" placeholder="signal, centroid, radius" /></label></div><div id="importanceRows" class="importance-rows card-surface"></div>
+      </section>
+
+      <section class="chapter" id="claims">
+        <div class="chapter-heading"><span class="chapter-number">11 / Claim-to-evidence explorer</span><h2>Can every headline claim be traced?</h2><p>Each statement below has a source artifact, a script, a status, and a caveat.</p></div>
+        <div class="claim-controls"><label>Status <select id="claimStatus"><option value="all">All statuses</option><option value="main">Main result</option><option value="exploratory">Exploratory</option></select></label><input id="claimSearch" type="search" placeholder="Search a claim" /></div><div id="claimRows" class="claim-rows"></div>
+      </section>
+
+      <section class="chapter reproduce-chapter" id="reproduce">
+        <div class="chapter-heading"><span class="chapter-number">12 / Reproducibility</span><h2>Could another person rebuild the evidence trail?</h2><p>Each node is tied to a source artifact and the script that creates it. Click a node to inspect the chain.</p></div>
+        <div id="pipelineMap" class="pipeline-map"></div><div id="pipelineDetail" class="pipeline-detail card-surface"></div>
+      </section>
+      <footer><span>Validation Experience</span><strong>Real artifacts. Explicit caveats. Inspectable claims.</strong><a href="#start">Back to evidence room ↑</a></footer>
+    </main>
+    <aside class="detail-drawer" id="detailDrawer" aria-hidden="true" aria-modal="true" role="dialog"><div class="drawer-panel"><div class="drawer-head"><div><span id="drawerEyebrow" class="drawer-eyebrow"></span><h3 id="drawerTitle"></h3></div><button class="close-drawer" type="button" aria-label="Close details">×</button></div><div id="drawerBody" class="drawer-body"></div></div></aside>
+    <script src="shared/submission-evidence.js?v=20260719-4"></script><script src="config.js?v=20260711-3"></script><script src="data/validation-data.js?v=20260718-1"></script><script src="src/main.js?v=20260719-4"></script><script src="src/react-app.js?v=20260719-4"></script>
+  </body>
+</html>
